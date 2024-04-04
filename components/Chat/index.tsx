@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 const ChatInterface = () => {
   // Array of 20 sample messages
-  const messages = [
+  const [messages, setMessages] = useState([
     { text: "Hello! How can I help you today?", isUser: true },
     { text: "Sure! What do you need assistance with?", isUser: false },
     {
@@ -50,7 +51,44 @@ const ChatInterface = () => {
     },
     { text: "Goodbye!", isUser: true },
     { text: "Goodbye! Have a great day!", isUser: false },
-  ];
+  ]);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimeout = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setMessages([]);
+      }, 10000);
+    };
+
+    const handleUserInteraction = () => {
+      resetTimeout();
+    };
+
+    // Add event listeners for user interactions
+    document.addEventListener("mousemove", handleUserInteraction);
+    document.addEventListener("keydown", handleUserInteraction);
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("scroll", handleUserInteraction);
+    document.addEventListener("wheel", handleUserInteraction);
+    document.addEventListener("mouseover", handleUserInteraction);
+
+    // Set initial timeout
+    resetTimeout();
+
+    // Cleanup function to remove event listeners
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("mousemove", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("scroll", handleUserInteraction);
+      document.removeEventListener("wheel", handleUserInteraction);
+      document.removeEventListener("mouseover", handleUserInteraction);
+    };
+  }, []);
 
   return (
     <div className="h-full w-full bg-white flex flex-col">
@@ -60,7 +98,7 @@ const ChatInterface = () => {
       </div>
 
       {/* Chat Messages */}
-      <div className="overflow-y-auto px-4 py-2 flex flex-col gap-4">
+      <div className="h-full overflow-y-auto px-4 flex flex-col gap-4 py-6">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -69,7 +107,7 @@ const ChatInterface = () => {
             }`}
           >
             {!message.isUser && (
-              <div className="mr-3">
+              <div className="mr-3 shrink-0">
                 <img
                   className="h-12 w-12 rounded-full"
                   src="https://static.thenounproject.com/png/1156284-200.png"
@@ -78,7 +116,7 @@ const ChatInterface = () => {
               </div>
             )}
             <div
-              className={`rounded-lg px-3 py-2 max-w-xs ${
+              className={`rounded-lg px-3 py-2 max-w-lg ${
                 message.isUser
                   ? "bg-gray-200 text-gray-800"
                   : "bg-blue-500 text-white"
@@ -87,7 +125,7 @@ const ChatInterface = () => {
               {message.text}
             </div>
             {message.isUser && (
-              <div className="ml-3">
+              <div className="ml-3 shrink-0">
                 <img
                   className="h-10 w-10 rounded-full"
                   src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
