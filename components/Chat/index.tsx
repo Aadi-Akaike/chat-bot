@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 interface Message {
   text: string;
   isUser: boolean;
@@ -37,31 +37,15 @@ const ChatInterface = () => {
       text: "Yes, all our products come with a standard one-year warranty.",
       isUser: false,
     },
-    { text: "How can I return or exchange an item?", isUser: true },
-    {
-      text: "You can initiate a return or exchange by contacting our customer support team within 30 days of receiving your order.",
-      isUser: false,
-    },
-    { text: "Are there any discounts available?", isUser: true },
-    {
-      text: "We occasionally offer discounts and promotions to our customers. Make sure to subscribe to our newsletter to stay updated.",
-      isUser: false,
-    },
-    { text: "Thank you for your assistance!", isUser: true },
-    {
-      text: "You're welcome! If you have any more questions, feel free to ask.",
-      isUser: false,
-    },
-    { text: "Goodbye!", isUser: true },
-    { text: "Goodbye! Have a great day!", isUser: false },
   ];
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState<string>("");
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== "") {
       setMessages([...messages, { text: newMessage, isUser: true }]);
       setNewMessage("");
+      scrollToBottom("smooth");
     }
   };
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -69,16 +53,31 @@ const ChatInterface = () => {
       handleSendMessage();
     }
   };
+  const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = (behavior: ScrollBehavior) => {
+    if (scrollableContainerRef.current) {
+      const { scrollHeight, clientHeight } = scrollableContainerRef.current;
+      scrollableContainerRef.current?.scrollTo({
+        top: scrollHeight - clientHeight,
+        behavior: behavior,
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom("auto");
+  }, []);
+  useEffect(() => {
+    scrollToBottom("smooth");
+  }, [messages.length]);
 
   return (
-    <div className="h-full w-full bg-white flex flex-col">
-      {/* Chat Header */}
-      <div className="bg-gray-800 text-white px-4 py-3">
-        <h1 className="text-lg font-semibold">Chat Bot</h1>
-      </div>
-
-      {/* Chat Messages */}
-      <div className="h-full overflow-y-auto px-4 flex flex-col gap-4 py-6">
+    <div className="h-full w-full bg-white flex flex-col overflow-y-hidden">
+      <div
+        className="h-full overflow-y-auto px-4 flex flex-col gap-4 py-6"
+        ref={scrollableContainerRef}
+      >
         {messages.map((message, index) => (
           <div
             key={index}
@@ -117,7 +116,6 @@ const ChatInterface = () => {
         ))}
       </div>
 
-      {/* Chat Input */}
       <div className="bg-gray-100 px-4 py-3 flex items-center">
         <input
           type="text"

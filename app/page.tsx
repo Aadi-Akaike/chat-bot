@@ -46,18 +46,23 @@ export default function Home() {
     <main
       className={`flex h-screen flex-col gap-3 items-start bg-white overflow-y-auto shadow-sm`}
     >
-      {startChat ? (
-        <Chat />
-      ) : (
-        <div className="flex flex-col h-full w-full justify-center items-center">
-          <button
-            onClick={() => setStartChat(true)}
-            className="bg-blue-500 px-3 py-2 border rounded-lg font-semibold"
-          >
-            Start Chat
-          </button>
+      <div className="flex flex-col h-full w-full">
+        <div className="bg-gray-800 text-white px-4 py-3">
+          <h1 className="text-lg font-semibold">Chat Bot</h1>
         </div>
-      )}
+        <div className="flex flex-col h-full overflow-y-hidden w-full items-center justify-center">
+          {startChat ? (
+            <Chat />
+          ) : (
+            <button
+              onClick={() => setStartChat(true)}
+              className="bg-blue-500 px-3 py-2 border rounded-lg font-semibold"
+            >
+              Start Chat
+            </button>
+          )}
+        </div>
+      </div>
     </main>
   );
 }
