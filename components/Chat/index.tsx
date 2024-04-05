@@ -1,9 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
+interface Message {
+  text: string;
+  isUser: boolean;
+}
 
 const ChatInterface = () => {
-  // Array of 20 sample messages
-  const [messages, setMessages] = useState([
+  const initialMessages = [
     { text: "Hello! How can I help you today?", isUser: true },
     { text: "Sure! What do you need assistance with?", isUser: false },
     {
@@ -51,44 +54,21 @@ const ChatInterface = () => {
     },
     { text: "Goodbye!", isUser: true },
     { text: "Goodbye! Have a great day!", isUser: false },
-  ]);
+  ];
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const resetTimeout = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setMessages([]);
-      }, 10000);
-    };
-
-    const handleUserInteraction = () => {
-      resetTimeout();
-    };
-
-    // Add event listeners for user interactions
-    document.addEventListener("mousemove", handleUserInteraction);
-    document.addEventListener("keydown", handleUserInteraction);
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("scroll", handleUserInteraction);
-    document.addEventListener("wheel", handleUserInteraction);
-    document.addEventListener("mouseover", handleUserInteraction);
-
-    // Set initial timeout
-    resetTimeout();
-
-    // Cleanup function to remove event listeners
-    return () => {
-      clearTimeout(timeoutId);
-      document.removeEventListener("mousemove", handleUserInteraction);
-      document.removeEventListener("keydown", handleUserInteraction);
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("scroll", handleUserInteraction);
-      document.removeEventListener("wheel", handleUserInteraction);
-      document.removeEventListener("mouseover", handleUserInteraction);
-    };
-  }, []);
+  const handleSendMessage = () => {
+    if (newMessage.trim() !== "") {
+      setMessages([...messages, { text: newMessage, isUser: true }]);
+      setNewMessage("");
+    }
+  };
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className="h-full w-full bg-white flex flex-col">
@@ -141,10 +121,16 @@ const ChatInterface = () => {
       <div className="bg-gray-100 px-4 py-3 flex items-center">
         <input
           type="text"
-          className="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 w-full"
+          className="bg-white text-black focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 w-full"
           placeholder="Type your message..."
+          onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
+          value={newMessage}
         />
-        <button className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">
+        <button
+          className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
+          onClick={handleSendMessage}
+        >
           Send
         </button>
       </div>
