@@ -7,39 +7,52 @@ interface Message {
 
 const ChatInterface = () => {
   const initialMessages = [
-    { text: "Hello! How can I help you today?", isUser: true },
-    { text: "Sure! What do you need assistance with?", isUser: false },
     {
-      text: "Can you provide more information about your products?",
-      isUser: true,
-    },
-    {
-      text: "Certainly! We have a wide range of products including electronics, clothing, and accessories.",
-      isUser: false,
-    },
-    { text: "Do you offer international shipping?", isUser: true },
-    {
-      text: "Yes, we offer international shipping to most countries.",
-      isUser: false,
-    },
-    { text: "How long does shipping usually take?", isUser: true },
-    {
-      text: "Shipping times vary depending on the destination. Typically, it takes 5-7 business days for domestic orders and 7-14 business days for international orders.",
-      isUser: false,
-    },
-    { text: "What payment methods do you accept?", isUser: true },
-    {
-      text: "We accept credit cards, PayPal, and bank transfers.",
-      isUser: false,
-    },
-    { text: "Is there a warranty on your products?", isUser: true },
-    {
-      text: "Yes, all our products come with a standard one-year warranty.",
+      text: "Hi! I'm RA.BOT, the Solar Education Assistant. How may I help you today?",
       isUser: false,
     },
   ];
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [newMessage, setNewMessage] = useState<string>("");
+
+  const [hideInput, setHideInput] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const resetTimeout = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setHideInput(true);
+      }, 10000);
+    };
+
+    const handleUserInteraction = () => {
+      resetTimeout();
+    };
+
+    // Add event listeners for user interactions
+    document.addEventListener("mousemove", handleUserInteraction);
+    document.addEventListener("keydown", handleUserInteraction);
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("scroll", handleUserInteraction);
+    document.addEventListener("wheel", handleUserInteraction);
+    document.addEventListener("mouseover", handleUserInteraction);
+
+    // Set initial timeout
+    resetTimeout();
+
+    // Cleanup function to remove event listeners
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("mousemove", handleUserInteraction);
+      document.removeEventListener("keydown", handleUserInteraction);
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("scroll", handleUserInteraction);
+      document.removeEventListener("wheel", handleUserInteraction);
+      document.removeEventListener("mouseover", handleUserInteraction);
+    };
+  }, []);
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== "") {
