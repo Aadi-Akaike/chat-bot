@@ -83,7 +83,7 @@ export default function Home() {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex items-center gap-3 ${
+            className={`flex items-start gap-3 ${
               message.isUser ? "justify-end" : "justify-start"
             }`}
           >
@@ -95,8 +95,8 @@ export default function Home() {
             <div
               className={`rounded-lg px-3.5 py-2.5 max-w-[70%] text-[#1E1E1E] ${
                 message.isUser
-                  ? "bg-[#E8F8DD] rounded-tl-lg rounded-b-lg"
-                  : "bg-white border border-[#EAECF0] rounded-tr-lg rounded-b-lg"
+                  ? "bg-[#E8F8DD] rounded-tl-lg rounded-b-lg shadow-sm"
+                  : "bg-white border border-[#EAECF0] rounded-tr-lg rounded-b-lg shadow-xs"
               }`}
             >
               {message.text}
