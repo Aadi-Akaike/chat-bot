@@ -110,7 +110,7 @@ export default function Home() {
         <div className="flex flex-row gap-2 shadow-xs bg-white rounded-lg border border-[#D0D5DD] px-3.5  justify-between">
           <input
             type="text"
-            className="placeholder:text-[#667085] text-[16px] font-normal leading-6 border-none outline-none w-full py-2.5"
+            className="placeholder:text-[#667085] text-[16px] font-normal leading-6 border-none outline-none w-full py-2.5 text-[#1E1E1E]"
             placeholder="Type your message..."
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyPress}
