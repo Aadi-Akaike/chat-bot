@@ -1,4 +1,5 @@
 "use client";
+import { generateUniqueId } from "@/app/utils";
 import React, { useEffect, useRef, useState } from "react";
 interface Message {
   text: string;
@@ -16,8 +17,14 @@ const ChatInterface = () => {
   const [newMessage, setNewMessage] = useState<string>("");
 
   const [hideInput, setHideInput] = useState<boolean>(false);
+  const [sessionId, setSessionId] = useState<string>("");
 
   useEffect(() => {
+    const uniqueId = generateUniqueId();
+    setSessionId(uniqueId);
+  }, []);
+
+  const id = useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
     const resetTimeout = () => {
@@ -115,7 +122,9 @@ const ChatInterface = () => {
               }`}
             >
               {message.text}
+              <p>{sessionId}</p>
             </div>
+
             {message.isUser && (
               <div className="ml-3 shrink-0">
                 <img
