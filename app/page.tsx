@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <main className={`flex h-screen flex-col bg-white`}>
       {/* header */}
-      <div className="flex flex-row  gap-4 py-4 px-6 items-center shadow-sm z-10">
+      <div className="flex flex-row  gap-4 py-2 px-6 items-center shadow-sm z-10">
         <Image src={botIcon} alt="Bot Icon" width={56} height={56} />
         <div className="flex flex-col">
           <p className="text-2xl font-bold leading-normal text-[#1E1E1E]">
@@ -106,7 +106,7 @@ export default function Home() {
       </div>
 
       {/* footer */}
-      <div className="p-6 border-t border-t-[#D0D5DD]">
+      <div className="px-6 py-4 border-t border-t-[#D0D5DD]">
         <div className="flex flex-row gap-2 shadow-xs bg-white rounded-lg border border-[#D0D5DD] px-3.5  justify-between">
           <input
             type="text"
